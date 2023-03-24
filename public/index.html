@@ -1,12 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatroom</title>
+    <!-- Include Leaflet CSS for the map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- Include Leaflet JavaScript for the map -->
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 </head>
 <body>
+  <ul id="messages"></ul>
+  <form id="usernameForm" action="">
+    <label for="username">Username:</label>
+    <input id="username" autocomplete="off" />
+    <button>Set</button>
+  </form>
+  <form id="roomForm" action="" style="display: none;">
+    <label for="room">Room:</label>
+    <input id="room" autocomplete="off" />
+    <button>Join</button>
+  </form>
+  <form id="chatForm" action="" style="display: none;">
+    <input id="input" autocomplete="off" autofocus />
+    <button>Send</button>
+  </form>
+  <button id="fetchRoomsButton">Fetch rooms</button>
+  <ul id="roomsList"></ul>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const usernameForm = document.getElementById('usernameForm');
+    const roomForm = document.getElementById('roomForm');
+    const chatForm = document.getElementById('chatForm');
+    const input = document.getElementById('input');
+    const messages = document.getElementById('messages');
+    const usernameInput = document.getElementById('username');
+    const roomInput = document.getElementById('room');
+
+    usernameForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (usernameInput.value) {
+        socket.emit('set username', usernameInput.value);
+        roomForm.style.display = 'block';
+        usernameForm.style.display = 'none';
+      }
+    });
+
+    roomForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (roomInput.value) {
+        socket.emit('join room', roomInput.value);
+        roomForm.style.display = 'none';
+        chatForm.style.display = 'block';
+      }
+    });
+
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (input.value) {
+        socket.emit('chat message', input.value);
+        input.value = '';
+      }
+    });
+
+    socket.on('chat message', (data) => {
+      const li = document.createElement('li');
+      li.textContent = `${data.username}: ${data.message}`;
+      messages.appendChild(li);
+    });
+
+    async function fetchRooms() {
+      const response = await fetch('/rooms');
+      const roomsData = await response.json();
+      const roomsList = document.getElementById('roomsList');
+      roomsList.innerHTML = '';
+
+      for (const room in roomsData) {
+        const li = document.createElement('li');
+        li.textContent = `${room}: ${roomsData[room]} user(s)`;
+        roomsList.appendChild(li);
+      }
+    }
+
+    const fetchRoomsButton = document.getElementById('fetchRoomsButton');
+    fetchRoomsButton.addEventListener('click', fetchRooms);
+  </script>
+   <div id="map" style="width: 100%; height: 500px;"></div>
+   <script src="/main.js"></script>
 
 </body>
 </html>
