@@ -5,6 +5,12 @@ const io = require('socket.io')(server);
 const ChatLog = require('./models/ChatLog');
 const GtfsRealtimeBindings = require('gtfs-realtime-bindings');
 const https = require('https');
+const exphbs = require('express-handlebars');
+
+const hbs = exphbs.create({ });
+
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
 
 app.use(express.static('public'));
 
@@ -12,6 +18,8 @@ app.use(express.static('public'));
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
+
+
 
 // Return the current list of chat rooms as JSON
 app.get('/rooms', (req, res) => {
@@ -110,7 +118,9 @@ io.on('connection', (socket) => {
 });
 
 const PORT = process.env.PORT || 3000;
-
+app.get("/test",(req, res) => {
+  res.render("test")
+});
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
