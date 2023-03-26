@@ -1,3 +1,13 @@
+const router = require('express').Router();
+
+const apiRoutes = require('./api');
+const homeRoutes = require('./homeRoutes');
+
+router.use('/', homeRoutes);
+router.use('/api', apiRoutes);
+
+
+//---------------Metro API:
 var GtfsRealtimeBindings = require('gtfs-realtime-bindings');
 var request = require('request');
 var requestSettings = {
@@ -13,3 +23,7 @@ request(requestSettings, function (error, response, body) {
     });
   }
 });
+
+
+//---------------Exports all routes:
+module.exports = router;
