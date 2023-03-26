@@ -1,8 +1,13 @@
 /* Bordered form */
 form {
     border: 3px solid #f1f1f1;
+    
   }
-  
+  body {
+    font-family: "Open Sans", sans-serif;
+    background: #e3e9f7;
+    color: #444444;
+  }
   /* Full-width inputs */
   input[type=text], input[type=password] {
     width: 100%;
