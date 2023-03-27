@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
@@ -6,7 +7,25 @@ const ChatLog = require('./models/ChatLog');
 const GtfsRealtimeBindings = require('gtfs-realtime-bindings');
 const https = require('https');
 const exphbs = require('express-handlebars');
+const withAuth = require('./utils/auth');
+const sequelize = require('./config/connection');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const sess = {
+  secret: 'Super secret secret',
+  cookie: {
+    maxAge: 300000,
+    httpOnly: true,
+    secure: false,
+    sameSite: 'strict',
+  },
+  resave: false,
+  saveUninitialized: true,
+  store: new SequelizeStore({
+    db: sequelize
+  })
+};
 
+app.use(session(sess));
 const hbs = exphbs.create({ });
 
 app.engine('handlebars', hbs.engine);
@@ -15,8 +34,8 @@ app.set('view engine', 'handlebars');
 app.use(express.static('public'));
 
 // Serve the index.html file on the root path
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
+app.get('/', withAuth, (req, res) => {
+  res.sendFile(__dirname + '/views/index.html');
 });
 
 
@@ -26,6 +45,10 @@ app.get('/rooms', (req, res) => {
   res.json(rooms);
 });
 
+//Loading the login page
+app.get('/login', (req, res) => {
+  res.render("login");
+});
 
 // Fetch and return vehicle positions from the GTFS API
 app.get('/api/vehicle_positions', (req, res) => {
