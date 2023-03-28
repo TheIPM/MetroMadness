@@ -10,6 +10,9 @@ const exphbs = require('express-handlebars');
 const withAuth = require('./utils/auth');
 const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
+
+const userRoutes = require('./controllers/api/userRoutes');
+
 const sess = {
   secret: 'Super secret secret',
   cookie: {
@@ -26,7 +29,14 @@ const sess = {
 };
 
 app.use(session(sess));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 const hbs = exphbs.create({ });
+
+const homeRoutes = require('./controllers/homeRoutes');
+app.use('/', homeRoutes);
+
+app.use('/api/users', userRoutes);
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');

@@ -1,58 +1,39 @@
 <div class="row">
   <div class="col-md-6">
     <h2>Login</h2>
-    <form class="form login-form">
+    <form class="form login-form" method="POST" action="/api/users/login">
       <div class="form-group">
-        <label for="email-login">email:</label>
-        <input class="form-input" type="text" id="email-login" />
+        <label for="email-login">Email:</label>
+        <input class="form-input" type="email" id="email-login" name="email" required />
       </div>
       <div class="form-group">
-        <label for="password-login">password:</label>
-        <input class="form-input" type="password" id="password-login" />
+        <label for="password-login">Password:</label>
+        <input class="form-input" type="password" id="password-login" name="password" required />
       </div>
       <div class="form-group">
-        <button class="btn btn-primary" type="submit">login</button>
+        <button class="btn btn-primary" type="submit">Login</button>
       </div>
     </form>
   </div>
   <div class="col-md-6">
     <h2>Signup</h2>
-    <form class="form signup-form">
+    <form class="form signup-form" method="POST" action="/api/users/signup">
       <div class="form-group">
-        <label for="name-signup">name:</label>
-        <input class="form-input" type="text" id="name-signup" />
+        <label for="name-signup">Name:</label>
+        <input class="form-input" type="text" id="name-signup" name="name" required />
       </div>
       <div class="form-group">
-        <label for="email-signup">email:</label>
-        <input class="form-input" type="text" id="email-signup" />
+        <label for="email-signup">Email:</label>
+        <input class="form-input" type="email" id="email-signup" name="email" required />
       </div>
       <div class="form-group">
-        <label for="password-signup">password:</label>
-        <input class="form-input" type="password" id="password-signup" />
+        <label for="password-signup">Password:</label>
+        <input class="form-input" type="password" id="password-signup" name="password" required />
       </div>
       <div class="form-group">
-        <button class="btn btn-primary" type="submit">signup</button>
+        <button class="btn btn-primary" type="submit">Signup</button>
       </div>
     </form>
   </div>
 </div>
-    <form method="post">
-        <div class="imgcontainer">
-          <img src="bus.jpg" alt="Bus Image" class="avatar">
-        </div>
-        <div class="container">
-          <label for="uname"><b>Username</b></label>
-          <input type="text" placeholder="Enter Username" name="uname" required>
-          <label for="psw"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" name="psw" required>
-          <button type="submit">Login</button>
-          <label>
-            <input type="checkbox" checked="checked" name="remember"> Remember me
-          </label>
-        </div>
-        <div class="container" style="background-color:#f0c243">
-        </div>
-      </form>
 <script src="./js/login.js"></script>
-
-{{!-- This is another change --}}
