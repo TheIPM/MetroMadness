@@ -16,7 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
           const position = [vehicle.latitude, vehicle.longitude];
           console.log(vehicle);
           function logger(){
-            console.log(vehicle.routeId);
+            //Add to chat.handlebars: function to call Chat room via route_id:
+            joinRoom(vehicle.routeId);
+          
+          console.log(vehicle.routeId);
           }
           if (vehicleMarkers[vehicleId]) {
             vehicleMarkers[vehicleId].setLatLng(position);
@@ -42,6 +45,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const messages = document.getElementById('messages');
   const usernameInput = document.getElementById('username');
   const roomInput = document.getElementById('room');
+  let chatRouteId;
+
+  //Join room function which brings in RouteId
+  function joinRoom(routeId){
+    socket.emit('join room', routeId);
+    document.getElementById("busRoute").innerText = routeId;
+    chatForm.style.display = 'block';
+  }
 
   usernameForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -55,9 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
   roomForm.addEventListener('submit', (e) => {
     e.preventDefault();
     if (roomInput.value) {
-      socket.emit('join room', roomInput.value);
-      roomForm.style.display = 'none';
-      chatForm.style.display = 'block';
+      joinRoom(roomInput.value);
+      // roomForm.style.display = 'none';
     }
   });
 
