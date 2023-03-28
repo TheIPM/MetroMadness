@@ -14,11 +14,16 @@ document.addEventListener('DOMContentLoaded', () => {
         data.forEach((vehicle) => {
           const vehicleId = vehicle.id;
           const position = [vehicle.latitude, vehicle.longitude];
-
+          console.log(vehicle);
+          function logger(){
+            console.log(vehicle.routeId);
+          }
           if (vehicleMarkers[vehicleId]) {
             vehicleMarkers[vehicleId].setLatLng(position);
           } else {
-            const marker = L.marker(position).addTo(map);
+            const marker = L.marker(position).on('click', function(event){
+              logger();
+            }).addTo(map);
             vehicleMarkers[vehicleId] = marker;
           }
         });

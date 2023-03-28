@@ -34,6 +34,7 @@ app.use(express.json());
 const hbs = exphbs.create({ });
 
 const homeRoutes = require('./controllers/homeRoutes');
+const { table } = require('console');
 app.use('/', homeRoutes);
 
 app.use('/api/users', userRoutes);
@@ -78,12 +79,15 @@ app.get('/api/vehicle_positions', (req, res) => {
       response.on('end', () => {
         const body = Buffer.concat(chunks);
         const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(body);
-        const vehicles = feed.entity.map((entity) => ({
+        const vehicles = feed.entity.map((entity) => {
+
+          return {
           id: entity.id,
           latitude: entity.vehicle.position.latitude,
           longitude: entity.vehicle.position.longitude,
-        }));
-
+          routeId: entity.vehicle.trip.routeId,
+          }
+        });
         res.json(vehicles);
       });
     } else {
@@ -94,8 +98,6 @@ app.get('/api/vehicle_positions', (req, res) => {
   });
 });
 
-
-// Initialize the chat rooms data structure
 const rooms = {};
 
 
