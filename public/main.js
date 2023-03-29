@@ -38,12 +38,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Chat logic
   const socket = io();
-  const usernameForm = document.getElementById('usernameForm');
+  // const usernameForm = document.getElementById('usernameForm');
   const roomForm = document.getElementById('roomForm');
   const chatForm = document.getElementById('chatForm');
   const input = document.getElementById('input');
   const messages = document.getElementById('messages');
-  const usernameInput = document.getElementById('username');
+  // const usernameInput = document.getElementById('username');
   const roomInput = document.getElementById('room');
   let chatRouteId;
 
@@ -54,14 +54,14 @@ document.addEventListener('DOMContentLoaded', () => {
     chatForm.style.display = 'block';
   }
 
-  usernameForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (usernameInput.value) {
-      socket.emit('set username', usernameInput.value);
-      roomForm.style.display = 'block';
-      usernameForm.style.display = 'none';
-    }
-  });
+  // usernameForm.addEventListener('submit', (e) => {
+  //   e.preventDefault();
+  //   if (usernameInput.value) {
+  //     socket.emit('set username', usernameInput.value);
+  //     roomForm.style.display = 'block';
+  //     usernameForm.style.display = 'none';
+  //   }
+  // });
 
   roomForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   socket.on('chat message', (data) => {
+    console.log('Received chat message:', data)
     const li = document.createElement('li');
     li.textContent = `${data.username}: ${data.message}`;
     messages.appendChild(li);
@@ -148,4 +149,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Update user location every 10 seconds
   setInterval(updateUserLocation, 10000);
+});
+
+async function getUserName() {
+  try {
+    const response = await fetch('/username');
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Fetched username:', data.username);
+      return data.username;
+    } else {
+      console.error('Error fetching user data:', response.statusText);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    return null;
+  }
+}
+
+async function updateWelcomeMessage() {
+  const welcomeMessage = document.querySelector('h2');
+  if (welcomeMessage) {
+    const username = await getUserName();
+    if (username !== null) {
+      welcomeMessage.textContent = `Welcome, ${username}!`;
+    } else {
+      console.error('Username not available');
+    }
+  }
+}
+
+
+
+function displayUserName(username) {
+  const welcomeText = document.querySelector("#welcome-text");
+  if (welcomeText) {
+    welcomeText.textContent = `Welcome, ${username}`;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateWelcomeMessage();
 });
