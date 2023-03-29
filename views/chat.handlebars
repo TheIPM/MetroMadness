@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-auto">
-    <h2>Welcome, {{name}}!</h2>
+<h2 id="welcome-text">Welcome</h2>
   </div>
 
 {{!-- Chat Feature: --}}
@@ -10,12 +10,12 @@
   </div>
 
   <ul id="messages"></ul>
-  <form id="usernameForm" action="">
+  {{!-- <form id="usernameForm" action="">
     <label for="username">Username:</label>
     <input id="username" autocomplete="off" />
     <button>Set</button>
-  </form>
-  <form id="roomForm" action="" style="display: none;">
+  </form> --}}
+  <form id="roomForm" action="" style="">
     <label for="room">Enter Bus number here:</label>
     <input id="room" autocomplete="off" />
     <button>Join</button>
