@@ -143,9 +143,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+function displayLocationonmap()
+{
+  
+}
+
   // Call updateUserLocation initially to add the user marker
   updateUserLocation();
 
   // Update user location every 10 seconds
+  
   setInterval(updateUserLocation, 10000);
+
+
+
+// Automatically back to login page afte 5 minutes
+function back_to_login() {
+  if(typeof timeOutObj != "undefined") {
+    clearTimeout(timeOutObj);
+}
+
+timeOutObj = setTimeout(function(){ 
+    localStorage.clear();
+    window.location = "/login";
+}, 60000);   //will expire after 1 minutes (300000 for 5 minutes)
+}
+
+document.onclick = back_to_login;
+
+
 });

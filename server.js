@@ -10,8 +10,8 @@ const exphbs = require('express-handlebars');
 const withAuth = require('./utils/auth');
 const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
-
 const userRoutes = require('./controllers/api/userRoutes');
+
 
 const sess = {
   secret: 'Super secret secret',
@@ -80,7 +80,7 @@ app.get('/api/vehicle_positions', (req, res) => {
         const body = Buffer.concat(chunks);
         const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(body);
         const vehicles = feed.entity.map((entity) => {
-
+          console.log(entity);
           return {
           id: entity.id,
           latitude: entity.vehicle.position.latitude,
@@ -151,6 +151,10 @@ io.on('connection', (socket) => {
     console.log('A user disconnected');
   });
 });
+
+
+
+
 
 const PORT = process.env.PORT || 3000;
 app.get("/test",(req, res) => {
