@@ -148,4 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Update user location every 10 seconds
   setInterval(updateUserLocation, 10000);
+
+
+  
 });

@@ -2,12 +2,10 @@ const router = require('express').Router();
 const { route, User } = require('../models');
 const withAuth = require('../utils/auth');
 
-router.get('/', (req, res) => {
-  if (req.session.logged_in) {
-    res.render('chat');
-    return;
-  }
-  res.render('login');
+router.get('/', withAuth,(req, res) => {
+  
+    res.render('chat',{logged_in:req.session.logged_in});
+ 
 });
 
 router.get('/route/:id', async (req, res) => {
