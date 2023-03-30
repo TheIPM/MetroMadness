@@ -14,18 +14,25 @@ document.addEventListener('DOMContentLoaded', () => {
         data.forEach((vehicle) => {
           const vehicleId = vehicle.id;
           const position = [vehicle.latitude, vehicle.longitude];
-
+          console.log(vehicle);
+          function logger(){
+            //Add to chat.handlebars: function to call Chat room via route_id:
+            joinRoom(vehicle.routeId);
+          console.log(vehicle.routeId);
+          }
           if (vehicleMarkers[vehicleId]) {
             vehicleMarkers[vehicleId].setLatLng(position);
           } else {
-            const marker = L.marker(position).addTo(map);
+            const marker = L.marker(position).on('click', function(event){
+              logger();
+              //------Tooltip added to map; to display each bus/train & tram so user can select desired route they wish to catch.
+            }).bindTooltip(vehicle.routeId).addTo(map);
             vehicleMarkers[vehicleId] = marker;
           }
         });
       })
       .catch((error) => console.error('Error fetching vehicle positions:', error));
   };
-
   setInterval(updateVehiclePositions, 10000); // Update every 10 seconds
 
   // Chat logic
