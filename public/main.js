@@ -163,6 +163,7 @@ function displayLocationonmap()
   
   setInterval(updateUserLocation, 10000);
 
+
 // Automatically back to login page afte 5 minutes
 function back_to_login() {
   if(typeof timeOutObj != "undefined") {
