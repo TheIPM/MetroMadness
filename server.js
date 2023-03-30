@@ -10,8 +10,10 @@ const exphbs = require('express-handlebars');
 const withAuth = require('./utils/auth');
 const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const path = require('path'); // Added path module
 
 const userRoutes = require('./controllers/api/userRoutes');
+
 
 const sess = {
   secret: 'Super secret secret',
@@ -46,10 +48,34 @@ app.use(express.static('public'));
 
 // Serve the index.html file on the root path
 app.get('/', withAuth, (req, res) => {
-  res.sendFile(__dirname + '/views/index.html');
+  res.sendFile(path.join(__dirname, '/views/index.html'));
 });
 
 
+// Add this route before the "/rooms" route
+app.get('/', withAuth, async (req, res) => {
+  try {
+    const userData = await User.findOne({
+      where: {
+        id: req.session.user_id,
+      },
+      attributes: { exclude: ['password'] },
+    });
+
+    const user = userData.get({ plain: true });
+    res.render('index', {
+      ...user,
+      logged_in: req.session.logged_in,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+app.get('/username', withAuth, (req, res) => {
+  console.log('Sending username:', req.session.username);
+  res.json({ username: req.session.username });
+});
 
 // Return the current list of chat rooms as JSON
 app.get('/rooms', (req, res) => {
@@ -80,7 +106,7 @@ app.get('/api/vehicle_positions', (req, res) => {
         const body = Buffer.concat(chunks);
         const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(body);
         const vehicles = feed.entity.map((entity) => {
-
+          console.log(entity);
           return {
           id: entity.id,
           latitude: entity.vehicle.position.latitude,
@@ -102,14 +128,18 @@ const rooms = {};
 
 
 // Handle WebSocket connections and events
+io.use((socket, next) => {
+  session(sess)(socket.request, {}, next);
+});
+
 io.on('connection', (socket) => {
   console.log('A user connected');
+  const req = socket.request;
 
-  //set username
-  socket.on('set username', (username) => {
-    socket.username = username;
-    console.log(`User set their username as: ${username}`);
-  });
+  if (req.session.username) {
+    socket.username = req.session.username;
+    console.log(`User set their username as: ${req.session.username}`);
+  }
 
   //handles users joining a room
   socket.on('join room', (room) => {
@@ -123,8 +153,8 @@ io.on('connection', (socket) => {
     }
     socket.join(room);
     socket.emit('room joined');
-
   });
+
   // Handle chat messages from users and save them to the database
   socket.on('chat message', async (msg) => {
     const room = Array.from(socket.rooms).find(r => r !== socket.id);
@@ -142,6 +172,7 @@ io.on('connection', (socket) => {
       }
     }
   });
+
   // Handle user disconnections and update the rooms data structure
   socket.on('disconnect', () => {
     const room = Object.keys(socket.rooms).find(r => r !== socket.id);
@@ -151,6 +182,10 @@ io.on('connection', (socket) => {
     console.log('A user disconnected');
   });
 });
+
+
+
+
 
 const PORT = process.env.PORT || 3000;
 app.get("/test",(req, res) => {
