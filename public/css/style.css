@@ -63,14 +63,95 @@ form {
     float: right;
     padding-top: 16px;
   }
-  
-  /* Change styles for span and cancel button on extra small screens */
-  @media screen and (max-width: 300px) {
-    span.psw {
-      display: block;
-      float: none;
+
+  /*------------------Media Queries------------------*/
+
+  /* Tablets */
+  @media screen and (max-width: 920px){
+    .header {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: center;
     }
-    .cancelbtn {
-      width: 100%;
+
+    h1 {
+    font-size: 20px;
     }
+
+    nav ul{
+    display: flex;
+    flex-direction: column;
+    }
+
+    .body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    flex-direction: column;   
+    }
+
+    .master-project {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    flex-direction: column;
+    }
+
+    .all-other-projects {
+    max-width: 100%;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    flex-direction: column;
+    }
+
+
+    .Contact {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: center;
+    }
+
+    .work{
+    display: none;
+    }
+       
+    footer {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: center;
+    }
+    }
+
+  /* Mobiles */
+  @media screen and (max-width: 480px) {
+
+    .header {
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    }
+    nav ul{
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    }
+    .master-project {
+    width: 98%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    flex-direction: column;
+    }
+
+    .all-other-projects {
+    max-width: 100%;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    flex-direction: column;
+    }}
   }

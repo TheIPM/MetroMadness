@@ -18,6 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
           function logger(){
             //Add to chat.handlebars: function to call Chat room via route_id:
             joinRoom(vehicle.routeId);
+
+
+          
+
           console.log(vehicle.routeId);
           }
           if (vehicleMarkers[vehicleId]) {
@@ -25,8 +29,12 @@ document.addEventListener('DOMContentLoaded', () => {
           } else {
             const marker = L.marker(position).on('click', function(event){
               logger();
+
               //------Tooltip added to map; to display each bus/train & tram so user can select desired route they wish to catch.
             }).bindTooltip(vehicle.routeId).addTo(map);
+
+            }).addTo(map);
+
             vehicleMarkers[vehicleId] = marker;
           }
         });
@@ -37,29 +45,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Chat logic
   const socket = io();
-  const usernameForm = document.getElementById('usernameForm');
+  // const usernameForm = document.getElementById('usernameForm');
   const roomForm = document.getElementById('roomForm');
   const chatForm = document.getElementById('chatForm');
   const input = document.getElementById('input');
   const messages = document.getElementById('messages');
-  const usernameInput = document.getElementById('username');
+  // const usernameInput = document.getElementById('username');
   const roomInput = document.getElementById('room');
+  let chatRouteId;
 
-  usernameForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (usernameInput.value) {
-      socket.emit('set username', usernameInput.value);
-      roomForm.style.display = 'block';
-      usernameForm.style.display = 'none';
-    }
-  });
+  //Join room function which brings in RouteId
+  function joinRoom(routeId){
+    socket.emit('join room', routeId);
+    document.getElementById("busRoute").innerText = routeId;
+    chatForm.style.display = 'block';
+  }
+
+  // usernameForm.addEventListener('submit', (e) => {
+  //   e.preventDefault();
+  //   if (usernameInput.value) {
+  //     socket.emit('set username', usernameInput.value);
+  //     roomForm.style.display = 'block';
+  //     usernameForm.style.display = 'none';
+  //   }
+  // });
 
   roomForm.addEventListener('submit', (e) => {
     e.preventDefault();
     if (roomInput.value) {
-      socket.emit('join room', roomInput.value);
-      roomForm.style.display = 'none';
-      chatForm.style.display = 'block';
+      joinRoom(roomInput.value);
+      // roomForm.style.display = 'none';
     }
   });
 
@@ -72,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   socket.on('chat message', (data) => {
+    console.log('Received chat message:', data)
     const li = document.createElement('li');
     li.textContent = `${data.username}: ${data.message}`;
     messages.appendChild(li);
@@ -135,9 +151,71 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+function displayLocationonmap()
+{
+  
+}
+
   // Call updateUserLocation initially to add the user marker
   updateUserLocation();
 
   // Update user location every 10 seconds
+  
   setInterval(updateUserLocation, 10000);
+
+// Automatically back to login page afte 5 minutes
+function back_to_login() {
+  if(typeof timeOutObj != "undefined") {
+    clearTimeout(timeOutObj);
+}
+
+timeOutObj = setTimeout(function(){ 
+    localStorage.clear();
+    window.location = "/login";
+}, 60000);   //will expire after 1 minutes (300000 for 5 minutes)
+}
+
+document.onclick = back_to_login;
+});
+
+async function getUserName() {
+  try {
+    const response = await fetch('/username');
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Fetched username:', data.username);
+      return data.username;
+    } else {
+      console.error('Error fetching user data:', response.statusText);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    return null;
+  }
+}
+
+async function updateWelcomeMessage() {
+  const welcomeMessage = document.querySelector('h2');
+  if (welcomeMessage) {
+    const username = await getUserName();
+    if (username !== null) {
+      welcomeMessage.textContent = `Welcome, ${username}!`;
+    } else {
+      console.error('Username not available');
+    }
+  }
+}
+
+
+
+function displayUserName(username) {
+  const welcomeText = document.querySelector("#welcome-text");
+  if (welcomeText) {
+    welcomeText.textContent = `Welcome, ${username}`;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateWelcomeMessage();
 });
