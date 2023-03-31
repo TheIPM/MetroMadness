@@ -51,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function joinRoom(routeId){
     socket.emit('join room', routeId);
     document.getElementById("busRoute").innerText = routeId;
+    Get_Route_Deatails(routeId);
     chatForm.style.display = 'block';
   }
 
@@ -258,4 +259,18 @@ document.getElementById('deleteChatLogsButton').addEventListener('click', async 
   } else {
     console.error('Username not available');
   }
+
 });
+
+async function Get_Route_Deatails(Route_id) {
+  const response = await fetch(`/api/metro_routes/${Route_id}`);
+  const Route_Data = await response.json();
+  
+  if (Route_Data != null) {
+   
+      var Discription = Route_Data[0].mr_toute_description;
+      document.getElementById("RouteDiscription").innerText = Discription;
+    
+  }
+
+}
