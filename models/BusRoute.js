@@ -1,47 +1,32 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
-class Project extends Model {}
+class BusRoute extends Model {}
 
-Project.init(
+BusRoute.init(
   {
-    id: {
+    mr_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
     },
-    name: {
+    mr_toute_number: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    description: {
+    mr_toute_description: {
       type: DataTypes.STRING,
     },
-    date_created: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-    needed_funding: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    user_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'user',
-        key: 'id',
-      },
-    },
+    
   },
   {
     sequelize,
     timestamps: false,
     freezeTableName: true,
     underscored: true,
-    modelName: 'project', // Amend 'project' model name to coreect model name
+    modelName: 'metro_routes', 
   }
 );
 
-module.exports = Project;
+module.exports = BusRoute;

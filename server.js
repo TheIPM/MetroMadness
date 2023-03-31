@@ -14,7 +14,7 @@ const path = require('path');
 const User = require('./models/User');
 
 const userRoutes = require('./controllers/api/userRoutes');
-
+const BusRoute = require('./models/BusRoute');
 
 const sess = {
   secret: 'Super secret secret',
@@ -114,6 +114,19 @@ app.delete('/api/chat_logs/:username', async (req, res) => {
   } catch (error) {
     console.error('Error deleting chat logs:', error);
     res.status(500).send('Error deleting chat logs');
+  }
+});
+
+
+app.get('/api/metro_routes/:mr_toute_number', async (req, res) => {
+  try {
+    const mr_toute_number = req.params.mr_toute_number;
+    const RouteData = await BusRoute.findAll({ where: { mr_toute_number } });
+    res.json(RouteData);
+    console.log(RouteData);
+  } catch (error) {
+    console.error('Error fetching chat logs:', error);
+    res.status(500).send('Error fetching chat logs');
   }
 });
 
