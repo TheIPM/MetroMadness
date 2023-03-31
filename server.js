@@ -53,6 +53,8 @@ app.use(express.static('public'));
 // });
 
 
+
+
 // Add this route before the "/rooms" route
 app.get('/', withAuth, async (req, res) => {
   try {
@@ -99,6 +101,22 @@ app.get('/api/chat_logs/:username', async (req, res) => {
   }
 });
 
+
+app.delete('/api/chat_logs/:username', async (req, res) => {
+  try {
+    const username = req.params.username;
+    const result = await ChatLog.destroy({ where: { username } });
+    if (result) {
+      res.status(200).send('Chat logs deleted successfully');
+    } else {
+      res.status(404).send('No chat logs found for the specified user');
+    }
+  } catch (error) {
+    console.error('Error deleting chat logs:', error);
+    res.status(500).send('Error deleting chat logs');
+  }
+});
+
 // Fetch and return vehicle positions from the GTFS API
 app.get('/api/vehicle_positions', (req, res) => {
   const requestSettings = {
@@ -107,6 +125,9 @@ app.get('/api/vehicle_positions', (req, res) => {
     encoding: null
   };
 
+
+
+  
   https.get(requestSettings.url, (response) => {
     if (response.statusCode === 200) {
       const chunks = [];

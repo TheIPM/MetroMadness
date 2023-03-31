@@ -232,6 +232,29 @@ fetchChatLogsButton.addEventListener('click', async () => {
   const username = await getUserName();
   if (username !== null) {
     fetchChatLogs(username);
+    document.getElementById('deleteChatLogsButton').style.display = 'block'; // Show the delete button
+  } else {
+    console.error('Username not available');
+  }
+});
+
+document.getElementById('deleteChatLogsButton').addEventListener('click', async () => {
+  const username = await getUserName();
+  if (username !== null) {
+    try {
+      const response = await fetch(`/api/chat_logs/${username}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        console.log('Chat logs deleted successfully');
+        fetchChatLogs(username);
+      } else {
+        console.error('Failed to delete chat logs');
+      }
+    } catch (error) {
+      console.error('Error deleting chat logs:', error);
+    }
   } else {
     console.error('Username not available');
   }
