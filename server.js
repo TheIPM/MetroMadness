@@ -10,7 +10,8 @@ const exphbs = require('express-handlebars');
 const withAuth = require('./utils/auth');
 const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const path = require('path'); // Added path module
+const path = require('path');
+const User = require('./models/User');
 
 const userRoutes = require('./controllers/api/userRoutes');
 
@@ -46,10 +47,10 @@ app.set('view engine', 'handlebars');
 
 app.use(express.static('public'));
 
-// Serve the index.html file on the root path
-app.get('/', withAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, '/views/index.html'));
-});
+// // Serve the index.html file on the root path
+// app.get('/', withAuth, (req, res) => {
+//   res.sendFile(path.join(__dirname, '/views/index.html'));
+// });
 
 
 // Add this route before the "/rooms" route
@@ -85,6 +86,17 @@ app.get('/rooms', (req, res) => {
 //Loading the login page
 app.get('/login', (req, res) => {
   res.render("login");
+});
+
+app.get('/api/chat_logs/:username', async (req, res) => {
+  try {
+    const username = req.params.username;
+    const chatLogs = await ChatLog.findAll({ where: { username } });
+    res.json(chatLogs);
+  } catch (error) {
+    console.error('Error fetching chat logs:', error);
+    res.status(500).send('Error fetching chat logs');
+  }
 });
 
 // Fetch and return vehicle positions from the GTFS API
