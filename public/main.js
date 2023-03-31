@@ -213,3 +213,26 @@ function displayUserName(username) {
 document.addEventListener('DOMContentLoaded', () => {
   updateWelcomeMessage();
 });
+
+async function fetchChatLogs(username) {
+  const response = await fetch(`/api/chat_logs/${username}`);
+  const chatLogsData = await response.json();
+  const chatLogsList = document.getElementById('chatLogsList');
+  chatLogsList.innerHTML = '';
+
+  chatLogsData.forEach((chatLog) => {
+    const li = document.createElement('li');
+    li.textContent = `${chatLog.username}: ${chatLog.message} (${chatLog.timestamp})`;
+    chatLogsList.appendChild(li);
+  });
+}
+
+const fetchChatLogsButton = document.getElementById('fetchChatLogsButton');
+fetchChatLogsButton.addEventListener('click', async () => {
+  const username = await getUserName();
+  if (username !== null) {
+    fetchChatLogs(username);
+  } else {
+    console.error('Username not available');
+  }
+});
