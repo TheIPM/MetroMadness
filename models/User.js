@@ -1,13 +1,16 @@
+//-------------All required packages:
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 const bcrypt = require('bcrypt');
 
+//---------------Creates a class called User:
 class User extends Model {
   checkPassword(loginPw) {
     return bcrypt.compareSync(loginPw, this.password);
   }
 }
 
+//---------------Defines the parameters to be captured for the table
 User.init(
   {
     id: {
@@ -54,4 +57,5 @@ User.init(
   }
 );
 
+//---------------Exports all information from BusRoute:
 module.exports = User;

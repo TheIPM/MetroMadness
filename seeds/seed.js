@@ -1,11 +1,12 @@
+//-------------All required packages:
 const sequelize = require('./config/connection');
 const ChatLog = require('./models/ChatLog');
 
+//-------------Seeds the Data Base:
 const seedDatabase = async () => {
   try {
     await sequelize.sync({ force: true });
     console.log('Database synced successfully.');
-
     // You can create some sample chat logs here if you want
     await ChatLog.bulkCreate([
       {
