@@ -1,10 +1,11 @@
+//-------------All required packages:
 const router = require('express').Router();
 const { Route } = require('../../models');
 const withAuth = require('../../utils/auth');
 
+//-------------Creates and posts new route:
 router.post('/', withAuth, async (req, res) => {
   try {
-    // const newProject = await Project.create({
     const newRoute = await Route.create({
       ...req.body,
       user_id: req.session.user_id,
@@ -15,7 +16,7 @@ router.post('/', withAuth, async (req, res) => {
     res.status(400).json(err);
   }
 });
-
+//-------------Deletes route:
 router.delete('/:id', withAuth, async (req, res) => {
   try {
     const RouteData = await Route.destroy({
@@ -29,11 +30,10 @@ router.delete('/:id', withAuth, async (req, res) => {
       res.status(404).json({ message: 'No Route found with this id!' });
       return;
     }
-
     res.status(200).json(RouteData);
   } catch (err) {
     res.status(500).json(err);
   }
 });
-
+//-------------Exports router code:
 module.exports = router;
