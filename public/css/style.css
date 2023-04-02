@@ -18,20 +18,71 @@ input[type='password'] {
   box-sizing: border-box;
 }
 
-/* Set a style for all buttons */
 button {
-  background-color: #04aa6d;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 100%;
+  position: relative;
+  padding: 10px 20px;
+  border-radius: 7px;
+  border: 1px solid rgb(61, 106, 255);
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 2px;
+  background: transparent;
+  color: #fff;
+  overflow: hidden;
+  box-shadow: 0 0 0 0 transparent;
+  -webkit-transition: all 0.2s ease-in;
+  -moz-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
+  background-color: #0f3c4c;
 }
-
-/* Add a hover effect for buttons */
 button:hover {
-  opacity: 0.8;
+  background: rgb(61, 106, 255);
+  box-shadow: 0 0 30px 5px rgba(0, 142, 236, 0.815);
+  -webkit-transition: all 0.2s ease-out;
+  -moz-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+}
+button:hover::before {
+  -webkit-animation: sh02 0.5s 0s linear;
+  -moz-animation: sh02 0.5s 0s linear;
+  animation: sh02 0.5s 0s linear;
+}
+button::before {
+  content: '';
+  display: block;
+  width: 0px;
+  height: 86%;
+  position: absolute;
+  top: 7%;
+  left: 0%;
+  opacity: 0;
+  background: #fff;
+  box-shadow: 0 0 50px 30px #fff;
+  -webkit-transform: skewX(-20deg);
+  -moz-transform: skewX(-20deg);
+  -ms-transform: skewX(-20deg);
+  -o-transform: skewX(-20deg);
+  transform: skewX(-20deg);
+}
+@keyframes sh02 {
+  from {
+    opacity: 0;
+    left: 0%;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    left: 100%;
+  }
+}
+button:active {
+  box-shadow: 0 0 0 0 transparent;
+  -webkit-transition: box-shadow 0.2s ease-in;
+  -moz-transition: box-shadow 0.2s ease-in;
+  transition: box-shadow 0.2s ease-in;
 }
 
 /* Extra style for the cancel button (red) */
@@ -136,6 +187,8 @@ span.psw {
   box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  z-index: 5;
+  opacity: 76%;
 }
 
 #messages {
@@ -149,11 +202,13 @@ span.psw {
   padding: 10px;
   flex-grow: 1;
   margin-bottom: 10px;
+  z-index: 5;
 }
 
 .chat-input-form {
   display: flex;
   gap: 10px;
+  z-index: 5;
 }
 
 input[type='text']#input {
@@ -161,9 +216,14 @@ input[type='text']#input {
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  z-index: 5;
 }
 
-
+.map-container {
+  width: 90%;
+  height: 500px;
+  z-index: 1;
+}
 
 /* Mobiles */
 @media screen and (max-width: 480px) {
@@ -194,3 +254,4 @@ input[type='text']#input {
     flex-direction: column;
   }
 }
+

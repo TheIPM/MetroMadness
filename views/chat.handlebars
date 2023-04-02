@@ -1,40 +1,45 @@
-<div class="row">
-  <div class="col-auto">
-<h2 id="welcome-text">Welcome</h2>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-6 col-md-12">
+      <h2 id="welcome-text">Welcome</h2>
+      <p>Welcome to Metro Madness, all you have to do is click on a pin or type in a bus number and you will be able to open up a chatroom for that vehichle. Use this to talk with anyone on that bus or communicate with anyone you know on that bus and see where they are in real time</p>
+    </div>
+    <div class="col-lg-6 col-md-12">
+      <div>
+        <h3>Chat Room/Route Number:<span id="busRoute"></span></h3>
+      </div>
+      <div>
+        <br></br>
+        <h4><span id="RouteDiscription"></span></h4>
+      </div>
+      <form id="roomForm" action="" style="">
+        <label for="room">Enter Bus number here:</label>
+        <input id="room" autocomplete="off" />
+        <button>Join</button>
+      </form>
+      <div class="chat-container">
+        <ul id="messages"></ul>
+        <form id="chatForm" class="chat-input-form" action="" style="display: none;">
+          <input id="input" autocomplete="off" autofocus />
+          <button>Send</button>
+        </form>
+      </div>
+      <button id="fetchRoomsButton">Fetch rooms</button>
+      <ul id="roomsList"></ul>
+      <button id="fetchChatLogsButton">Fetch My Chat Logs</button>
+      <ul id="chatLogsList"></ul>
+      <button id="deleteChatLogsButton" style="display: none;">Delete Chat Logs</button>
+      <div id="chatLogsContainer"></div>
+    </div>
   </div>
-
-{{!-- Chat Feature: --}}
-<body>
-  <div>
-    <h3>Chat Room/Route Number:<span id="busRoute"></span></h3>
+  <div class="row">
+    <div class="col">
+      <div id="map" class="map-container"></div>
+    </div>
   </div>
-<div>
-  <br></br>
-    <h4><span id="RouteDiscription"></span></h4>
-  </div>
-
-  <form id="roomForm" action="" style="">
-    <label for="room">Enter Bus number here:</label>
-    <input id="room" autocomplete="off" />
-    <button>Join</button>
-  </form>
-   <div class="chat-container"> <ul id="messages"></ul>
-<form id="chatForm" class="chat-input-form" action="" style="display: none;">
-  <input id="input" autocomplete="off" autofocus />
-  <button>Send</button>
-</form>
-  </form>
-  </div>
-  <button id="fetchRoomsButton">Fetch rooms</button>
-  <ul id="roomsList"></ul>
-<button id="fetchChatLogsButton">Fetch My Chat Logs</button>
-<ul id="chatLogsList"></ul>
-<button id="deleteChatLogsButton" style="display: none;">Delete Chat Logs</button>
-<div id="chatLogsContainer"></div>
-
+</div>
 
   <script src="/socket.io/socket.io.js"></script>
-   <div id="map" style="width: 100%; height: 500px;"></div>   {{!--Amend styling to CSS sheets --}}
    <script src="/main.js"></script>
 </body>
 <footer>
