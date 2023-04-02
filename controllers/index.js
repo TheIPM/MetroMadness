@@ -1,11 +1,11 @@
+//-------------All required packages:
 const router = require('express').Router();
-
 const apiRoutes = require('./api');
 const homeRoutes = require('./homeRoutes');
 
+//-------------Calling all required routes:
 router.use('/', homeRoutes);
 router.use('/api', apiRoutes);
-
 
 //---------------Metro API:
 var GtfsRealtimeBindings = require('gtfs-realtime-bindings');
@@ -23,7 +23,6 @@ request(requestSettings, function (error, response, body) {
     });
   }
 });
-
 
 //---------------Exports all routes:
 module.exports = router;
