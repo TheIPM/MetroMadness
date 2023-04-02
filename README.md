@@ -24,22 +24,26 @@ You and your group will use everything you’ve learned over the past six weeks 
 * Have a professional README (with unique name, description, technologies used, screenshot, and link to deployed application).
 
 # User Story
-As a user I want to select the radio station by Country from the first drop down box.
-From the Country drop this will give me a list of available radio stations to choose from.
-When I select/click on the “Play” button the radio station will play on a second page > this will also trigger the second API to leave an inspirational quote as the background image.  
+As a user I want to know if my transport is running on time. So that if the bus or train is not running on time or delayed, I can organise alternative transport to get to my destination.
+As a user I want to create an account and have my data stored privately and securely.
+Once logged into the application I want to be able to view available bus/routes from a map. Using the map I can hover over the pins on the map and using geolocation it will show me the bus/route number so that I can select my appropriate route I wish to take.
+Once my route is selected I want to be able to get real time data of that route.
+I also want to be able to connect and chat freely with other commuters on my transport route.  
 
 ## Who is the audience?
-People who use and rely on public transport for either work/recreation to get to their chosen destination.🚌
+Audience (Target Market) is Split into 2x Main Target Audiences:
+* People of all walks of life who use and rely on public transport for either work/recreation to get to their chosen destination. 
+* Parents who have adolescence children that are transitioning to be trusted to catch public transport on their own. The parents can easily chat to them and also track them on their bus/tram/train. .🚌
 ## What is the problems that the product solves?
-Users can use the chat feature to talk to other commuters on the route and find out where their transport is, if it’s on time, or, has been delayed due to an accident or road works etc. This gives the end user the opportunity to find alternative transport to get to their destination on time ⌚
+Users can use the chat feature to talk to other commuters on the route and find out where their transport is, if it’s on time, or, has been delayed due to an accident or road works etc. This gives the end user the opportunity to find alternative transport to get to their destination on time. ⌚
 ## How does the product solve that problem?
-Real live time data of where your current transport is, including if it’s on time, or late warnings. The open chat forum allows the users to connect to other users of the same route to be able to communicate freely and update each other.
+Real time data of where your current transport is, including if it’s; on time or has been delayed with warning to the user. The open chat forum allows the users to connect to other users of the same route to be able to communicate and update each other for FREE!
 
 ## Acceptance Criteria
 ```
 * As a user I want to know if my transport is running on time. So that if the bus or train is not running on time or delayed, I can organise alternative transport to get to my destination.
 * As a user I want to create an account and have my data stored privately and securely.
-* Once logged into the application I want to be able to view available bus/routes from a drop down box so that I may select my appropriate route.
+* Once logged into the application I want to be able to view available bus/routes from a map. Using the map I want the ability to hover over the pin to view each bus/tram/trains route information and when I select the pin it takes me to the chat room.
 * Once my route is selected I want to be able to get real time data of that route.
 * I also want to be able to connect and chat freely with other commuters on my transport route.
 ```
