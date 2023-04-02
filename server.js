@@ -12,7 +12,7 @@ const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const path = require('path');
 const User = require('./models/User');
-
+const { format } = require('date-fns');
 const userRoutes = require('./controllers/api/userRoutes');
 
 const PORT = process.env.PORT || 3000;
@@ -105,13 +105,19 @@ app.get('/api/chat_logs/:username', async (req, res) => {
   try {
     const username = req.params.username;
     const chatLogs = await ChatLog.findAll({ where: { username } });
-    res.json(chatLogs);
+
+    // Format the timestamps
+    const formattedChatLogs = chatLogs.map(log => ({
+      ...log.toJSON(),
+      timestamp: format(new Date(log.timestamp), 'PPpp')
+    }));
+
+    res.json(formattedChatLogs);
   } catch (error) {
     console.error('Error fetching chat logs:', error);
     res.status(500).send('Error fetching chat logs');
   }
 });
-
 
 app.delete('/api/chat_logs/:username', async (req, res) => {
   try {
