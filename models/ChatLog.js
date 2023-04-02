@@ -1,8 +1,11 @@
+//-------------All required packages:
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
+//---------------Creates a class called ChatLog:
 class ChatLog extends Model {}
 
+//---------------Defines the parameters to be captured for the table
 ChatLog.init(
   {
     id: {
@@ -36,4 +39,5 @@ ChatLog.init(
   }
 );
 
+//---------------Exports all information from BusRoute:
 module.exports = ChatLog;
