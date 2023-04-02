@@ -12,21 +12,19 @@
   <br></br>
     <h4><span id="RouteDiscription"></span></h4>
   </div>
-  <ul id="messages"></ul>
-  {{!-- <form id="usernameForm" action="">
-    <label for="username">Username:</label>
-    <input id="username" autocomplete="off" />
-    <button>Set</button>
-  </form> --}}
+
   <form id="roomForm" action="" style="">
     <label for="room">Enter Bus number here:</label>
     <input id="room" autocomplete="off" />
     <button>Join</button>
   </form>
-  <form id="chatForm" action="" style="display: none;">
-    <input id="input" autocomplete="off" autofocus />
-    <button>Send</button>
+   <div class="chat-container"> <ul id="messages"></ul>
+<form id="chatForm" class="chat-input-form" action="" style="display: none;">
+  <input id="input" autocomplete="off" autofocus />
+  <button>Send</button>
+</form>
   </form>
+  </div>
   <button id="fetchRoomsButton">Fetch rooms</button>
   <ul id="roomsList"></ul>
 <button id="fetchChatLogsButton">Fetch My Chat Logs</button>
