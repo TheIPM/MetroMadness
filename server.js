@@ -14,7 +14,12 @@ const path = require('path');
 const User = require('./models/User');
 
 const userRoutes = require('./controllers/api/userRoutes');
-const BusRoute = require('./models/BusRoute');
+
+const PORT = process.env.PORT || 3000;
+app.get("/test",(req, res) => {
+  res.render("test")
+});
+
 
 const sess = {
   secret: 'Super secret secret',
@@ -82,7 +87,13 @@ app.get('/username', withAuth, (req, res) => {
 
 // Return the current list of chat rooms as JSON
 app.get('/rooms', (req, res) => {
-  res.json(rooms);
+  const nonEmptyRooms = {};
+  for (const [room, clients] of Object.entries(rooms)) {
+    if (clients > 0) {
+      nonEmptyRooms[room] = clients;
+    }
+  }
+  res.json(nonEmptyRooms);
 });
 
 //Loading the login page
@@ -117,19 +128,6 @@ app.delete('/api/chat_logs/:username', async (req, res) => {
   }
 });
 
-
-app.get('/api/metro_routes/:mr_toute_number', async (req, res) => {
-  try {
-    const mr_toute_number = req.params.mr_toute_number;
-    const RouteData = await BusRoute.findAll({ where: { mr_toute_number } });
-    res.json(RouteData);
-    console.log(RouteData);
-  } catch (error) {
-    console.error('Error fetching chat logs:', error);
-    res.status(500).send('Error fetching chat logs');
-  }
-});
-
 // Fetch and return vehicle positions from the GTFS API
 app.get('/api/vehicle_positions', (req, res) => {
   const requestSettings = {
@@ -138,6 +136,7 @@ app.get('/api/vehicle_positions', (req, res) => {
     encoding: null
   };
 
+  
 
 
   
@@ -189,6 +188,13 @@ io.on('connection', (socket) => {
 
   //handles users joining a room
   socket.on('join room', (room) => {
+    // Leave the previous room if the user was in one
+    const prevRoom = Array.from(socket.rooms).find(r => r !== socket.id);
+    if (prevRoom) {
+      socket.leave(prevRoom);
+      rooms[prevRoom]--;
+    }
+  
     if (!rooms[room]) {
       rooms[room] = 1;
     } else if (rooms[room] < 20) {
@@ -197,10 +203,19 @@ io.on('connection', (socket) => {
       socket.emit('room full', 'The room is full. Please try another room.');
       return;
     }
+    
     socket.join(room);
+  
+    // Check if the room is empty after the user joins
+    const clients = io.sockets.adapter.rooms.get(room);
+    if (!clients || clients.size === 0) {
+      delete rooms[room];
+      console.log(`Room ${room} is empty and has been destroyed.`);
+    }
+  
     socket.emit('room joined');
   });
-
+  
   // Handle chat messages from users and save them to the database
   socket.on('chat message', async (msg) => {
     const room = Array.from(socket.rooms).find(r => r !== socket.id);
@@ -219,13 +234,28 @@ io.on('connection', (socket) => {
     }
   });
 
-  // Handle user disconnections and update the rooms data structure
   socket.on('disconnect', () => {
-    const room = Object.keys(socket.rooms).find(r => r !== socket.id);
-    if (room && rooms[room]) {
-      rooms[room]--;
-    }
+    const room = Array.from(socket.rooms).find(r => r !== socket.id);
     console.log('A user disconnected');
+    
+    if (room) {
+      if (rooms[room]) {
+        rooms[room]--;
+        if (rooms[room] === 0) {
+          delete rooms[room];
+          console.log(`Room ${room} is empty and has been destroyed.`);
+        }
+      }
+  
+      socket.leave(room);
+      
+      // Check if the room is empty after the user disconnects
+      const clients = io.sockets.adapter.rooms.get(room);
+      if (!clients || clients.size === 0) {
+        delete rooms[room];
+        console.log(`Room ${room} is empty and has been destroyed.`);
+      }
+    }
   });
 });
 
@@ -233,10 +263,6 @@ io.on('connection', (socket) => {
 
 
 
-const PORT = process.env.PORT || 3000;
-app.get("/test",(req, res) => {
-  res.render("test")
-});
 sequelize.sync({ force: false }).then(() => {
   server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

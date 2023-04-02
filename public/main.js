@@ -1,3 +1,4 @@
+let currentRoom = null;
 document.addEventListener('DOMContentLoaded', () => {
   // Map logic
   const map = L.map('map').setView([-34.9285, 138.6007], 13); // Set coordinates to Adelaide
@@ -274,3 +275,4 @@ async function Get_Route_Deatails(Route_id) {
   }
 
 }
+
