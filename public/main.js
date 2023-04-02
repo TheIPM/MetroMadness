@@ -263,6 +263,7 @@ document.getElementById('deleteChatLogsButton').addEventListener('click', async 
 
 });
 
+
 async function Get_Route_Deatails(Route_id) {
   const response = await fetch(`/api/metro_routes/${Route_id}`);
   const Route_Data = await response.json();
