@@ -14,7 +14,7 @@ const path = require('path');
 const User = require('./models/User');
 const { format } = require('date-fns');
 const userRoutes = require('./controllers/api/userRoutes');
-
+const BusRoute = require('./models/BusRoute');
 const PORT = process.env.PORT || 3000;
 app.get("/test",(req, res) => {
   res.render("test")
@@ -133,6 +133,19 @@ app.delete('/api/chat_logs/:username', async (req, res) => {
     res.status(500).send('Error deleting chat logs');
   }
 });
+
+app.get('/api/metro_routes/:mr_toute_number', async (req, res) => {
+  try {
+    const mr_toute_number = req.params.mr_toute_number;
+    const RouteData = await BusRoute.findAll({ where: { mr_toute_number } });
+    res.json(RouteData);
+    console.log(RouteData);
+  } catch (error) {
+    console.error('Error fetching chat logs:', error);
+    res.status(500).send('Error fetching chat logs');
+  }
+});
+
 
 // Fetch and return vehicle positions from the GTFS API
 app.get('/api/vehicle_positions', (req, res) => {
