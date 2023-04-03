@@ -33,7 +33,7 @@ const signupFormHandler = async (event) => {
       headers: { 'Content-Type': 'application/json' },
     });
     if (response.ok) {
-      document.location.replace('/');
+      alert("Account created!"); // Display an alert message
     } else {
       const errorData = await response.json();
       if (errorData.message) {
